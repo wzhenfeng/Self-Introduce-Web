@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wong Zhen Feng — CS & AI Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #7c6dfa;
+    --accent2: #4de8c2;
+    --accent3: #f5a623;
+    --text: #e8e8f0;
+    --muted: #7a7a9a;
+    --dim: #3a3a5a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── GRID BG ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--dim) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 48px;
+    backdrop-filter: blur(16px);
+    background: rgba(10,10,15,0.75);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent2); }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 140px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.35s forwards;
+  }
+
+  h1 .accent { color: var(--accent); }
+  h1 .dim { color: var(--dim); }
+
+  .hero-sub {
+    margin-top: 28px;
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 540px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.5s forwards;
+  }
+
+  .hero-tags {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.65s forwards;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+
+  .tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-cta {
+    margin-top: 48px;
+    display: flex;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.8s forwards;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 4px;
+    transition: all 0.25s;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: 1px solid var(--accent);
+  }
+
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--accent);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.7s 1.2s forwards;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--dim);
+    animation: expandLine 1.5s 1.5s ease-out forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-size: 1.0rem;
+  }
+
+  .about-text p span { color: var(--text); }
+
+  .info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color 0.2s;
+  }
+
+  .info-item:hover { border-color: var(--accent); }
+
+  .info-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .info-value {
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+
+  .info-value a {
+    color: var(--accent2);
+    text-decoration: none;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .skill-card:hover::before { transform: scaleX(1); }
+  .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  .skill-card.green::before { background: var(--accent2); }
+  .skill-card.green:hover { border-color: var(--accent2); }
+
+  .skill-card.orange::before { background: var(--accent3); }
+  .skill-card.orange:hover { border-color: var(--accent3); }
+
+  .skill-icon {
+    font-size: 1.6rem;
+    margin-bottom: 14px;
+  }
+
+  .skill-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 12px;
+  }
+
+  .skill-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    padding: 4px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-item {
+    position: relative;
+    padding-left: 32px;
+    padding-bottom: 48px;
+    border-left: 1px solid var(--border);
+  }
+
+  .exp-item:last-child { border-left: 1px solid transparent; padding-bottom: 0; }
+
+  .exp-dot {
+    position: absolute;
+    left: -5px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .exp-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .exp-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+  }
+
+  .exp-company {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .exp-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .exp-bullets li {
+    font-size: 0.9rem;
+    color: var(--muted);
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+
+  /* ── PROJECTS ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    flex: 1;
+  }
+
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+  }
+
+  /* ── EDUCATION ── */
+  .edu-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .edu-item {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .edu-item:last-child { border-bottom: none; }
+
+  .edu-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    padding-top: 4px;
+  }
+
+  .edu-school {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.0rem;
+    margin-bottom: 4px;
+  }
+
+  .edu-degree {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .cgpa-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    background: rgba(124, 109, 250, 0.15);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    padding-bottom: 140px;
+  }
+
+  .contact-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 64px;
+    text-align: center;
+  }
+
+  .contact-wrap h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    margin-bottom: 16px;
+  }
+
+  .contact-wrap p {
+    color: var(--muted);
+    max-width: 440px;
+    margin: 0 auto 40px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .contact-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    padding: 12px 22px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .contact-chip:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(77,232,194,0.05);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 28px 48px;
+    border-top: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── LANGUAGE BARS ── */
+  .lang-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .lang-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .lang-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    width: 80px;
+    letter-spacing: 0.05em;
+  }
+
+  .lang-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .lang-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    animation: fillBar 1.2s ease-out forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .lang-level {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.05em;
+    width: 44px;
+    text-align: right;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes expandLine {
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes fillBar {
+    to { transform: scaleX(1); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 80px 24px; }
+    #hero { padding-top: 120px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .edu-item { grid-template-columns: 1fr; gap: 8px; }
+    .contact-wrap { padding: 40px 24px; }
+    .scroll-hint { left: 24px; }
+  }
+
+  /* Chat button */
+#chat-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 999;
+}
+
+/* Chat window */
+#chatbot {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 300px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999;
+}
+
+#chat-header {
+  background: var(--accent);
+  padding: 12px;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+#chat-messages {
+  padding: 10px;
+  height: 220px;
+  overflow-y: auto;
+  font-size: 0.8rem;
+}
+
+#chat-input-area {
+  display: flex;
+  border-top: 1px solid var(--border);
+}
+
+#chat-input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: white;
+}
+
+#chat-input-area button {
+  background: var(--accent2);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVI -->
+<nav>
+  <div class="nav-logo">ZF</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow">Available for opportunities</div>
+  <h1>
+    Wong<br>
+    Zhen <span class="accent">Feng</span><span class="dim">.</span>
+  </h1>
+  <p class="hero-sub">
+    CS &amp; AI student at APU · Aspiring Software &amp; Web Developer · 
+    Passionate about building intelligent systems.
+  </p>
+  <div class="hero-tags">
+    <span class="tag">Java</span>
+    <span class="tag">Python</span>
+    <span class="tag">C#</span>
+    <span class="tag">HTML</span>
+    <span class="tag">R Code</span>
+    <span class="tag">Linux</span>
+    <span class="tag">AI / NLP</span>
+    <span class="tag">IT Support</span>
+  </div>
+  <div class="hero-cta">
+    <a href="#contact" class="btn btn-primary">Get in touch</a>
+    <a href="#projects" class="btn btn-ghost">View projects</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01 /</span>
+    <h2>About</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I'm an <span>aspiring Software &amp; Web Developer</span> currently pursuing a Bachelor of Computer Science (Hons) in <span>Artificial Intelligence</span> at Asia Pacific University, Kuala Lumpur.</p>
+      <p>Through my internship at <span>TNT Communication / SP Setia</span>, I gained real-world IT support experience — diagnosing hardware, maintaining systems, and supporting network connectivity.</p>
+      <p>I'm driven by a curiosity for <span>AI and intelligent systems</span>, and I'm actively seeking internship opportunities to apply my skills in a collaborative tech environment.</p>
+      <div class="lang-grid">
+        <div class="lang-item">
+          <span class="lang-name">English</span>
+          <div class="lang-bar"><div class="lang-fill" style="animation-delay:0.1s"></div></div>
+          <span class="lang-level">Fluent</span>
+        </div>
+        <div class="lang-item">
+          <span class="lang-name">Chinese</span>
+          <div class="lang-bar"><div class="lang-fill" style="animation-delay:0.25s"></div></div>
+          <span class="lang-level">Fluent</span>
+        </div>
+        <div class="lang-item">
+          <span class="lang-name">Malay</span>
+          <div class="lang-bar"><div class="lang-fill" style="animation-delay:0.4s"></div></div>
+          <span class="lang-level">Fluent</span>
+        </div>
+        <div class="lang-item">
+          <span class="lang-name">Cantonese</span>
+          <div class="lang-bar"><div class="lang-fill" style="animation-delay:0.55s"></div></div>
+          <span class="lang-level">Fluent</span>
+        </div>
+      </div>
+    </div>
+    <div class="info-list reveal">
+      <div class="info-item">
+        <span class="info-label">Location</span>
+        <span class="info-value">Kajang, Selangor</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Email</span>
+        <span class="info-value"><a href="mailto:wongzhenfeng05@gmail.com">wongzhenfeng05@gmail.com</a></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Phone</span>
+        <span class="info-value"><a href="tel:601168311478">6011-68311478</a></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">LinkedIn</span>
+        <span class="info-value"><a href="https://www.linkedin.com/in/zhen-fengwong-1b6651354" target="_blank">zhen-fengwong</a></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">GitHub</span>
+        <span class="info-value"><a href="https://github.com/wzhenfeng" target="_blank">wzhenfeng</a></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Status</span>
+        <span class="info-value" style="color:var(--accent2)">Open to opportunities</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">02 /</span>
+    <h2>Skills</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon">💻</div>
+      <div class="skill-title">Programming Languages</div>
+      <div class="skill-pills">
+        <span class="pill">Java</span>
+        <span class="pill">Python</span>
+        <span class="pill">C#</span>
+        <span class="pill">HTML</span>
+        <span class="pill">R Code</span>
+      </div>
+    </div>
+    <div class="skill-card green reveal">
+      <div class="skill-icon">🔧</div>
+      <div class="skill-title">Systems & Tools</div>
+      <div class="skill-pills">
+        <span class="pill">Linux CLI</span>
+        <span class="pill">Troubleshooting</span>
+        <span class="pill">Hardware Repair</span>
+        <span class="pill">OS Setup</span>
+        <span class="pill">Networking</span>
+      </div>
+    </div>
+    <div class="skill-card orange reveal">
+      <div class="skill-icon">📊</div>
+      <div class="skill-title">Productivity</div>
+      <div class="skill-pills">
+        <span class="pill">MS Word</span>
+        <span class="pill">MS Excel</span>
+        <span class="pill">PowerPoint</span>
+        <span class="pill">MS Access</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <div class="skill-icon">🤖</div>
+      <div class="skill-title">AI & Machine Learning</div>
+      <div class="skill-pills">
+        <span class="pill">NLP</span>
+        <span class="pill">Chatbot Dev</span>
+        <span class="pill">AI Concepts</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-num">03 /</span>
+    <h2>Experience</h2>
+  </div>
+  <div class="reveal">
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-date">June 2025 – September 2025</div>
+      <div class="exp-title">Hardware &amp; Software Internship</div>
+      <div class="exp-company">TNT Communication Sdn Bhd · SP Setia (Assigned)</div>
+      <ul class="exp-bullets">
+        <li>Provided on-site IT support at SP Setia, resolving hardware and software issues</li>
+        <li>Diagnosed and repaired desktops, laptops, and peripheral equipment</li>
+        <li>Installed, configured, and maintained operating systems and software applications</li>
+        <li>Performed routine system maintenance and troubleshooting for smooth operations</li>
+        <li>Delivered front-line user support and resolved technical queries efficiently</li>
+        <li>Supported network setup and connectivity troubleshooting tasks</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">04 /</span>
+    <h2>Projects</h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-num">01</div>
+      <div class="project-title">AI Chatbot Development</div>
+      <p class="project-desc">Built a simple conversational chatbot using Python and Natural Language Processing (NLP) techniques to understand and respond to user inputs intelligently.</p>
+      <div class="project-tech">
+        <span class="pill">Python</span>
+        <span class="pill">NLP</span>
+        <span class="pill">AI</span>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-num">02</div>
+      <div class="project-title">School Appointment System</div>
+      <p class="project-desc">Developed a Java-based system for students to book consultations and schedule appointments with lecturers. Features include availability management, scheduling, and notification systems for streamlined communication.</p>
+      <div class="project-tech">
+        <span class="pill">Java</span>
+        <span class="pill">Scheduling</span>
+        <span class="pill">Notifications</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header reveal">
+    <span class="section-num">05 /</span>
+    <h2>Education</h2>
+  </div>
+  <div class="edu-timeline reveal">
+    <div class="edu-item">
+      <div class="edu-year">2025 – Present</div>
+      <div>
+        <div class="edu-school">Asia Pacific University, KL</div>
+        <div class="edu-degree">Bachelor of Computer Science (Hons) — Artificial Intelligence</div>
+        <span class="cgpa-badge">CGPA: 3.32 / 4.0</span>
+      </div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-year">2023 – 2025</div>
+      <div>
+        <div class="edu-school">Asia Pacific University, KL</div>
+        <div class="edu-degree">Diploma in Information Communication Technology (Software Engineering)</div>
+        <span class="cgpa-badge">CGPA: 3.08 / 4.0</span>
+      </div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-year">2018 – 2023</div>
+      <div>
+        <div class="edu-school">SMJK Yuk Choy, Ipoh</div>
+        <div class="edu-degree">Secondary School — SPM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap reveal">
+    <h3>Let's work<br><span style="color:var(--accent)">together</span></h3>
+    <p>I'm actively looking for internship and entry-level opportunities in software development, web dev, or AI. Let's connect!</p>
+    <div class="contact-links">
+      <a href="mailto:wongzhenfeng05@gmail.com" class="contact-chip">
+        ✉ wongzhenfeng05@gmail.com
+      </a>
+      <a href="tel:601168311478" class="contact-chip">
+        📞 6011-68311478
+      </a>
+      <a href="https://www.linkedin.com/in/zhen-fengwong-1b6651354" target="_blank" class="contact-chip">
+        in LinkedIn
+      </a>
+      <a href="https://github.com/wzhenfeng" target="_blank" class="contact-chip">
+        ⌥ GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CHATBOT -->
+<div id="chatbot">
+  <div id="chat-header">AI Assistant ✨</div>
+  <div id="chat-messages"></div>
+  <div id="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Ask me something...">
+    <button onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<button id="chat-toggle" onclick="toggleChat()">💬</button>
+
+<!-- FOOTER -->
+<footer>
+  © WONG ZHEN FENG STUDENT FROM APU
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Language bar trigger
+  const langObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.lang-fill').forEach(bar => {
+          bar.style.animationPlayState = 'running';
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.lang-grid').forEach(el => langObserver.observe(el));
+
+  function toggleChat() {
+  const chat = document.getElementById("chatbot");
+  chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+}
+
+function addMessage(text, sender) {
+  const msg = document.createElement("div");
+  msg.style.margin = "6px 0";
+  msg.style.color = sender === "user" ? "#4de8c2" : "#e8e8f0";
+  msg.innerText = (sender === "user" ? "You: " : "Bot: ") + text;
+
+  document.getElementById("chat-messages").appendChild(msg);
+}
+
+function sendMessage() {
+  const input = document.getElementById("chat-input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  setTimeout(() => {
+    const reply = getBotReply(text);
+    addMessage(reply, "bot");
+  }, 500);
+}
+
+function getBotReply(input) {
+  input = input.toLowerCase();
+
+  const greetings = [
+    "Hey there 👋 how can I help you?",
+    "Hi! What would you like to know about Zhen Feng?",
+    "Hello 😊 feel free to ask me anything about him!"
+  ];
+
+  const skills = [
+    "He’s quite strong in Java, Python, and C#. Recently he’s also been exploring AI and web development.",
+    "From what I know, his main skills are programming (Java, Python, C#) and some AI/NLP work.",
+    "He’s been building up skills in software dev and AI — especially chatbot-related stuff."
+  ];
+
+  const projects = [
+    "He worked on an AI chatbot and also a school appointment system — both pretty practical projects.",
+    "One of his projects is a chatbot (like me 😄), and another is a scheduling system for students.",
+    "He has built a chatbot using NLP and also a Java-based appointment system."
+  ];
+
+  const contact = [
+    "You can reach him through the contact section — email or LinkedIn works best.",
+    "Best way to contact him is via email or LinkedIn, both are listed below.",
+    "Check out the contact section — you’ll find his email and LinkedIn there."
+  ];
+
+  const name = [
+    "His name is Wong Zhen Feng, but you can just call him Zhen Feng or even ZF! or you call as Wong also can 😄",
+  ]
+
+  function random(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  if (input.includes("hello") || input.includes("hi"))
+    return random(greetings);
+
+  if (input.includes("skill"))
+    return random(skills);
+
+  if (input.includes("project"))
+    return random(projects);
+
+  if (input.includes("contact"))
+    return random(contact);
+
+  if (input.includes("name"))
+    return random(name);
+
+  return "Hmm 🤔 I’m not fully sure about that yet, but you can try asking about his skills, projects, or experience!";
+}
+</script>
+</body>
+</html>
